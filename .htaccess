@@ -1,0 +1,3 @@
+RewriteEngine On
+RewriteRule ^$ /dist/index.html [L]
+RewriteRule ^(.*)$ /dist/$1 [L]
