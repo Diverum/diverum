@@ -1,51 +1,56 @@
 @import "tailwindcss";
 
 :root {
-  /* Fondo principal - El más oscuro de tu paleta */
-  --bg: #12383c; /* Dark Teal */
+  /* Fondo principal - Espacio profundo, denota lujo y tecnología */
+  --bg: #05070a; 
   
-  /* Superficies y Cards */
-  --surface: #144547; /* Dark Teal 2 */
-  --surface-hover: #245455; /* Dark Slate Grey */
+  /* Superficies y Cards - Un tono azulado muy oscuro para dar profundidad */
+  --surface: #0c1117; 
+  --surface-hover: #161d27; 
   
-  /* Bordes y Divisiones */
-  --border: #5b8e8c; /* Dark Cyan (con opacidad se verá de ataque) */
-  --border-light: rgba(151, 199, 192, 0.2); /* Pearl Aqua suave */
+  /* Bordes y Divisiones - El color "Circuito" */
+  --border: #1e293b; 
+  --border-light: rgba(56, 189, 248, 0.1); 
   
-  /* Textos */
-  --text: #f0f7f6; /* Un blanco azulado para que no canse la vista */
-  --text-muted: #97c7c0; /* Pearl Aqua */
-  --text-dim: #5b8e8c; /* Dark Cyan */
+  /* Textos - Blanco puro para títulos y un gris azulado para el cuerpo */
+  --text: #ffffff; 
+  --text-muted: #94a3b8; 
+  --text-dim: #475569; 
   
-  /* Acentos (Donde brilla la automatización) */
-  --accent: #97c7c0; /* Pearl Aqua */
-  --accent-dim: rgba(151, 199, 192, 0.15);
-  --accent-glow: rgba(151, 199, 192, 0.08);
+  /* Acentos (EL PODER DE LA AI) */
+  /* Cyan eléctrico: Representa automatización y flujo */
+  --accent: #1a898f; 
+  /* Violeta: Representa la inteligencia y la AI */
+  --accent-ai: #8b5cf6; 
+  --accent-dim: rgba(0, 242, 255, 0.15);
+  --accent-glow: rgba(0, 242, 255, 0.3);
   
-  /* Gradiente Pro para botones o secciones Hero */
-  --gradient: linear-gradient(135deg, #245455 0%, #12383c 100%);
-  --gradient-accent: linear-gradient(135deg, #97c7c0 0%, #5b8e8c 100%);
+  /* Gradientes de alto impacto para SaaS */
+  --gradient: linear-gradient(135deg, #00f2ff 0%, #8b5cf6 100%);
+  --gradient-dark: linear-gradient(180deg, rgba(12, 17, 23, 0) 0%, #0c1117 100%);
 }
 
 body {
   margin: 0;
   padding: 0;
   background: var(--bg);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(0, 242, 255, 0.05) 0px, transparent 50%);
   color: var(--text);
   font-family: 'DM Sans', sans-serif;
-  /* Añadimos un sutil suavizado para que se vea más premium */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 ::selection {
-  background: var(--dark-cyan);
-  color: var(--text);
+  background: var(--accent);
+  color: var(--bg);
 }
 
-/* Un toque de clase para los scrolls */
+/* Scrollbar estilo "Cyberpunk Minimal" */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -53,10 +58,11 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--surface-hover);
+  background: var(--border);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--accent);
+  box-shadow: 0 0 10px var(--accent-glow);
 }
