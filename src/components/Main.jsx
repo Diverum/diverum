@@ -1,4 +1,4 @@
-function Main() {
+export function Main() {
   return (
     <main className="flex justify-center items-center h-screen bg-gray-900">
       <Card 
