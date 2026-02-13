@@ -1,6 +1,6 @@
 import { motion as Motion } from "framer-motion";
-import { Badge } from "./ui/Badge";
-import { MagneticBtn } from "./ui/MagneticBtn.jsx";
+import Badge from "./ui/Badge";
+import MagneticBtn from "./ui/MagneticBtn.jsx";
 
 const ToolChip = ({ icon, label }) => (
   <Motion.div
