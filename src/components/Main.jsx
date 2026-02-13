@@ -1,4 +1,4 @@
-export function Main() {
+ function Main() {
   return (
     <main className="flex justify-center items-center h-screen bg-gray-900">
       <Card 
@@ -28,3 +28,5 @@ const Card = ({ title, description }) => {
     </div>
   );
 };
+
+export default Main;
