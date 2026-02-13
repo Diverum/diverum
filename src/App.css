@@ -1,1 +1,62 @@
 @import "tailwindcss";
+
+:root {
+  /* Fondo principal - El más oscuro de tu paleta */
+  --bg: #12383c; /* Dark Teal */
+  
+  /* Superficies y Cards */
+  --surface: #144547; /* Dark Teal 2 */
+  --surface-hover: #245455; /* Dark Slate Grey */
+  
+  /* Bordes y Divisiones */
+  --border: #5b8e8c; /* Dark Cyan (con opacidad se verá de ataque) */
+  --border-light: rgba(151, 199, 192, 0.2); /* Pearl Aqua suave */
+  
+  /* Textos */
+  --text: #f0f7f6; /* Un blanco azulado para que no canse la vista */
+  --text-muted: #97c7c0; /* Pearl Aqua */
+  --text-dim: #5b8e8c; /* Dark Cyan */
+  
+  /* Acentos (Donde brilla la automatización) */
+  --accent: #97c7c0; /* Pearl Aqua */
+  --accent-dim: rgba(151, 199, 192, 0.15);
+  --accent-glow: rgba(151, 199, 192, 0.08);
+  
+  /* Gradiente Pro para botones o secciones Hero */
+  --gradient: linear-gradient(135deg, #245455 0%, #12383c 100%);
+  --gradient-accent: linear-gradient(135deg, #97c7c0 0%, #5b8e8c 100%);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  /* Añadimos un sutil suavizado para que se vea más premium */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: var(--dark-cyan);
+  color: var(--text);
+}
+
+/* Un toque de clase para los scrolls */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--surface-hover);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
