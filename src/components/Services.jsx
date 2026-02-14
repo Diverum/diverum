@@ -136,44 +136,6 @@ export default function Services() {
             <AgentCard key={i} {...agent} />
           ))}
         </Stagger>
-
-        {/* Integrations strip */}
-        <Reveal delay={0.2}>
-          <div
-            className="mt-14 p-6 rounded-2xl"
-            style={{
-              background: "var(--bg)",
-              border: "1px solid var(--border)",
-            }}
-          >
-            <p
-              className="text-xs uppercase tracking-widest mb-4"
-              style={{ color: "var(--text-dim)" }}
-            >
-              Herramientas que dominamos
-            </p>
-            <div className="flex flex-wrap gap-3">
-              {[
-                "Zapier", "Make", "n8n", "OpenAI", "LangChain",
-                "HubSpot", "Salesforce", "Stripe", "Shopify",
-                "Slack", "Google Sheets", "Airtable", "Notion",
-                "Twilio", "AWS", "Python", "PostgreSQL",
-              ].map((tool) => (
-                <span
-                  key={tool}
-                  className="text-xs px-3 py-1.5 rounded-lg"
-                  style={{
-                    background: "var(--surface)",
-                    color: "var(--text-dim)",
-                    border: "1px solid var(--border)",
-                  }}
-                >
-                  {tool}
-                </span>
-              ))}
-            </div>
-          </div>
-        </Reveal>
       </div>
     </section>
   );
