@@ -460,7 +460,7 @@ export default function Hero() {
           className="flex flex-col items-center md:items-start"
         >
           <Motion.div variants={itemVariants}>
-            <Badge>Agentes Digitales & ROI</Badge>
+            <Badge>Agentes Digitales & Automatización</Badge>
           </Motion.div>
 
           <Motion.h1
@@ -473,7 +473,7 @@ export default function Hero() {
               className="italic font-light"
               style={{ fontFamily: "'Instrument Serif', serif", color: "var(--accent)" }}
             >
-              Inteligencia Artificial
+              Automatizaciones
             </span>
           </Motion.h1>
 
@@ -482,8 +482,7 @@ export default function Hero() {
             className="mt-6 text-base md:text-lg text-center md:text-left max-w-2xl leading-relaxed"
             style={{ color: "var(--text-muted)" }}
           >
-            Diverum automatiza tus ventas y operaciones en Ecommerce.
-            Elimina el trabajo manual y deja que nuestros agentes trabajen 24/7.
+            Automatización real para empresas que ya están cansadas del trabajo manual.
           </Motion.p>
 
           <Motion.div
@@ -491,7 +490,7 @@ export default function Hero() {
             className="mt-10 flex flex-col sm:flex-row gap-4 w-full sm:w-auto"
           >
             <MagneticBtn primary>Agendar Consultoría →</MagneticBtn>
-            <MagneticBtn>Ver soluciones</MagneticBtn>
+            <MagneticBtn>Ver servicios</MagneticBtn>
           </Motion.div>
 
           {/* VISUAL SHOWCASE */}
@@ -550,10 +549,10 @@ export default function Hero() {
           <Motion.div variants={itemVariants} className="mt-12 w-full">
             <div className="flex flex-wrap justify-center md:justify-start gap-3">
               {[
-                { icon: "🤖", label: "Custom Agents" },
-                { icon: "📈", label: "Ecommerce Scale" },
-                { icon: "🧠", label: "AI Consulting" },
-                { icon: "⚙️", label: "Process Automation" },
+                { icon: "🤖", label: "Agentes personalizados" },
+                { icon: "📈", label: "Escala tu negocio" },
+                { icon: "🧠", label: "Consultoría de IA" },
+                { icon: "⚙️", label: "Automatización de procesos" },
               ].map((item) => (
                 <ToolChip key={item.label} icon={item.icon} label={item.label} />
               ))}

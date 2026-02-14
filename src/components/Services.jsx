@@ -57,24 +57,20 @@ export default function Services() {
   const agents = [
     {
       icon: "🎯",
-      title: "Agentes de Ventas",
+      title: "Automatización de Ventas",
       desc: "Tu fuerza de ventas digital que no duerme. Captura, clasifica y da seguimiento a cada lead automáticamente. Cero oportunidades perdidas.",
       capabilities: [
         "Seguimiento automático de leads en CRM",
         "Respuesta instantánea a formularios",
         "Generación automática de contratos",
-        "Scoring y priorización de prospectos",
-        "Alertas de deals estancados",
       ],
     },
     {
       icon: "⚙️",
-      title: "Agentes de Operaciones",
+      title: "Automatización de Operaciones",
       desc: "El engranaje invisible que conecta todos tus sistemas. Datos sincronizados, inventarios al día, reportes que se generan solos cada lunes a las 7am.",
       capabilities: [
-        "Conexión ERP con herramientas internas",
         "Gestión automática de inventarios",
-        "Reportes operativos sin intervención",
         "Sincronización de datos entre sistemas",
         "Alertas de anomalías operativas",
       ],
@@ -82,12 +78,10 @@ export default function Services() {
     },
     {
       icon: "💰",
-      title: "Agentes de Finanzas",
+      title: "Automatización de Finanzas",
       desc: "Facturación, conciliación y cobros en piloto automático. Tu equipo financiero se enfoca en estrategia, no en perseguir pagos ni cuadrar planillas.",
       capabilities: [
         "Facturación automática post-venta",
-        "Conciliación bancaria diaria",
-        "Seguimiento de cobros y recordatorios",
         "Reportes financieros automáticos",
         "Alertas de flujo de caja",
       ],
@@ -100,8 +94,6 @@ export default function Services() {
         "Mapeo de procesos actuales",
         "Identificación de cuellos de botella",
         "Análisis de ROI por automatización",
-        "Roadmap de implementación",
-        "Selección de herramientas óptimas",
       ],
     },
   ];
@@ -114,12 +106,12 @@ export default function Services() {
     >
       <div className="max-w-6xl mx-auto">
         <Reveal>
-          <Badge>Tu escuadrón de agentes</Badge>
+          <Badge>Automatización integrada</Badge>
           <h2
             className="mt-4 text-3xl md:text-5xl font-bold tracking-tight"
             style={{ fontFamily: "'DM Sans', sans-serif" }}
           >
-            No vendes código.{" "}
+            Automatización inteligente para{" "}
             <span
               className="italic"
               style={{
@@ -127,16 +119,15 @@ export default function Services() {
                 color: "var(--accent)",
               }}
             >
-              Vendes empleados digitales
+              escalar
             </span>{" "}
-            que no duermen
+            tu negocio
           </h2>
           <p
             className="mt-4 text-base max-w-2xl"
             style={{ color: "var(--text-muted)" }}
           >
-            Cada agente se especializa en un área de tu negocio. Trabajan 24/7,
-            no cometen errores y escalan sin que tengas que contratar a nadie más.
+            Deja de perder tiempo en tareas repetitivas. Integra tecnología para automatizar tus procesos.
           </p>
         </Reveal>
 

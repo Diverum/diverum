@@ -50,19 +50,19 @@ const PainCard = ({ icon, question, detail }) => (
       icon: "🔥",
       question: "¿Creces pero el caos crece más rápido?",
       detail:
-        "Cada persona nueva hereda los mismos flujos rotos. Más gente no resuelve un problema de arquitectura operativa.",
+        "Cada persona nueva hereda los mismos flujos rotos. Contratar más personas para sostener procesos rotos solo hace el problema más caro. El caos escala más rápido que tu equipo.",
     },
     {
       icon: "📉",
       question: "¿Tus reportes siempre llegan tarde o con errores?",
       detail:
-        "Si necesitas 3 personas y 4 horas para armar un reporte semanal, el problema no es el reporte. Es cómo se genera.",
+        "Si tus reportes llegan tarde o con errores, el problema no es el reporte. Es tu forma de operar.",
     },
     {
       icon: "💸",
       question: "¿Pagas salarios para mover datos entre sistemas?",
       detail:
-        "Contratar talento para hacer trabajo mecánico es la forma más cara de no automatizar. Ese presupuesto debería ir a decisiones, no a data entry.",
+        "Pagar salarios para mover datos entre sistemas es la forma más cara de no automatizar. Ese dinero debería ir a decisiones, no a data entry..",
     },
   ];
 
@@ -76,7 +76,7 @@ const PainCard = ({ icon, question, detail }) => (
               className="mt-4 text-3xl md:text-5xl font-bold tracking-tight"
               style={{ fontFamily: "'DM Sans', sans-serif" }}
             >
-              Si esto te suena,{" "}
+              Si tu operación vive en Excel y mensajes sueltos{" "}
               <span
                 className="italic"
                 style={{
@@ -84,7 +84,7 @@ const PainCard = ({ icon, question, detail }) => (
                   color: "var(--accent)",
                 }}
               >
-                no es coincidencia
+                estás perdiendo dinero cada semana
               </span>
             </h2>
             <p className="mt-4 text-base" style={{ color: "var(--text-muted)" }}>
