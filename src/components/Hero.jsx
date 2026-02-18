@@ -459,21 +459,19 @@ export default function Hero() {
           animate="visible"
           className="flex flex-col items-center md:items-start"
         >
-          <Motion.div variants={itemVariants}>
-            <Badge>Agentes Digitales & Automatización</Badge>
-          </Motion.div>
 
+          {/* Hero section */}
           <Motion.h1
             variants={itemVariants}
             className="mt-8 text-4xl sm:text-6xl md:text-[5.5rem] font-bold leading-[1.08] tracking-tighter text-center md:text-left"
           >
-            Escala tu negocio con
+            Diverum Labs
             <br className="hidden md:block" />
             <span
               className="italic font-light"
               style={{ fontFamily: "'Instrument Serif', serif", color: "var(--accent)" }}
             >
-              Automatizaciones
+              Automatización con IA para empresas
             </span>
           </Motion.h1>
 
@@ -482,7 +480,7 @@ export default function Hero() {
             className="mt-6 text-base md:text-lg text-center md:text-left max-w-2xl leading-relaxed"
             style={{ color: "var(--text-muted)" }}
           >
-            Automatización real para empresas que ya están cansadas del trabajo manual.
+            Diverum Labs ayuda a compañías a integrar inteligencia artificial y eliminar procesos manuales.
           </Motion.p>
 
           <Motion.div
