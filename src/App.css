@@ -1,33 +1,45 @@
 @import "tailwindcss";
 
 :root {
-  /* Fondo principal - Espacio profundo, denota lujo y tecnología */
-  --bg: #05070a; 
+  /* =============================================
+     ORGANIC LOGIC — Paleta IA Ética y Humana
+     #F0EAD6 · #E2DAC2 · #4A5D4E · #2D332D · #FFFFFF
   
-  /* Superficies y Cards - Un tono azulado muy oscuro para dar profundidad */
-  --surface: #0c1117; 
-  --surface-hover: #161d27; 
-  
-  /* Bordes y Divisiones - El color "Circuito" */
-  --border: #1e293b; 
-  --border-light: rgba(56, 189, 248, 0.1); 
-  
-  /* Textos - Blanco puro para títulos y un gris azulado para el cuerpo */
-  --text: #ffffff; 
-  --text-muted: #94a3b8; 
-  --text-dim: #475569; 
-  
-  /* Acentos (EL PODER DE LA AI) */
-  /* Cyan eléctrico: Representa automatización y flujo */
-  --accent: #1a898f; 
-  /* Violeta: Representa la inteligencia y la AI */
-  --accent-ai: #8b5cf6; 
-  --accent-dim: rgba(0, 242, 255, 0.15);
-  --accent-glow: rgba(0, 242, 255, 0.3);
-  
-  /* Gradientes de alto impacto para SaaS */
-  --gradient: linear-gradient(135deg, #00f2ff 0%, #8b5cf6 100%);
-  --gradient-dark: linear-gradient(180deg, rgba(12, 17, 23, 0) 0%, #0c1117 100%);
+
+  /* Fondos */
+  --bg: #F0EAD6;
+  --bg-alt: #E2DAC2;
+
+  /* Superficies y Cards */
+  --surface: #FFFFFF;
+  --surface-hover: #F7F3EA;
+
+  /* Bordes */
+  --border: rgba(74, 93, 78, 0.18);
+  --border-light: rgba(74, 93, 78, 0.10);
+  --border-dark: rgba(45, 51, 45, 0.25);
+
+  /* Textos */
+  --text: #2D332D;
+  --text-muted: #4A5D4E;
+  --text-dim: #7a8e7d;
+
+  /* Acentos — verde bosque reemplaza cyan/violeta */
+  --accent: #4A5D4E;
+  --accent-dark: #2D332D;
+  --accent-ai: #4A5D4E;
+  --accent-dim: rgba(74, 93, 78, 0.12);
+  --accent-light: rgba(74, 93, 78, 0.12);
+  --accent-glow: rgba(74, 93, 78, 0.20);
+
+  /* Gradientes */
+  --gradient: linear-gradient(135deg, #4A5D4E 0%, #2D332D 100%);
+  --gradient-dark: linear-gradient(180deg, rgba(240, 234, 214, 0) 0%, #E2DAC2 100%);
+
+  /* Sombras orgánicas */
+  --shadow-sm: 0 2px 8px rgba(45, 51, 45, 0.08);
+  --shadow-md: 0 8px 32px rgba(45, 51, 45, 0.12);
+  --shadow-lg: 0 20px 60px rgba(45, 51, 45, 0.16);
 }
 
 body {
@@ -35,8 +47,8 @@ body {
   padding: 0;
   background: var(--bg);
   background-image: 
-    radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.05) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(0, 242, 255, 0.05) 0px, transparent 50%);
+    radial-gradient(at 20% 10%, rgba(226, 218, 194, 0.6) 0px, transparent 60%),
+    radial-gradient(at 80% 90%, rgba(240, 234, 214, 0.8) 0px, transparent 60%);
   color: var(--text);
   font-family: 'DM Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -45,24 +57,21 @@ body {
 
 ::selection {
   background: var(--accent);
-  color: var(--bg);
+  color: #FFFFFF;
 }
 
-/* Scrollbar estilo "Cyberpunk Minimal" */
-::-webkit-scrollbar {
-  width: 6px;
-}
+/* Scrollbar orgánico */
+::-webkit-scrollbar { width: 6px; }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg);
+  background: var(--bg-alt);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border);
+  background: var(--accent);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--accent);
-  box-shadow: 0 0 10px var(--accent-glow);
+  background: var(--accent-dark);
 }

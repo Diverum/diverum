@@ -1,39 +1,56 @@
-import { motion as Motion } from "framer-motion";
+import { motion as Motion } from "framer-motion"
 
-export default function MagneticBtn({ children, primary = false, onClick, className = "" }) {
+export default function MagneticBtn({
+  children,
+  primary = false,
+  onClick,
+  className = "",
+  href,
+}) {
+  const baseStyle = {
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '8px',
+    borderRadius: '100px',
+    padding: '13px 30px',
+    fontSize: '14px',
+    fontWeight: 600,
+    cursor: 'pointer',
+    border: 'none',
+    textDecoration: 'none',
+    letterSpacing: '0.01em',
+    transition: 'box-shadow 0.2s ease',
+  }
+
+  const primaryStyle = {
+    ...baseStyle,
+    background: 'var(--accent)',
+    color: '#FFFFFF',
+    boxShadow: '0 2px 8px rgba(45, 51, 45, 0.15)',
+  }
+
+  const secondaryStyle = {
+    ...baseStyle,
+    background: 'transparent',
+    color: 'var(--accent)',
+    border: '1.5px solid rgba(45, 51, 45, 0.25)',
+  }
+
+  const Tag = href ? 'a' : 'button'
+
   return (
-    <Motion.button
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
+    <Motion.a
+      as={Tag}
+      href={href}
       onClick={onClick}
-      className={`relative flex items-center justify-center px-8 py-4 rounded-full text-sm font-bold tracking-wide transition-all duration-300 cursor-pointer overflow-hidden w-full sm:w-auto ${className}`}
-      style={
-        primary
-          ? {
-              background: "var(--accent)", // Pearl Aqua (Claro)
-              color: "var(--dark-teal)",   // Texto Oscuro para contraste máximo
-              border: "1px solid var(--accent)",
-              boxShadow: "0 0 20px var(--accent-glow)", // Resplandor externo
-            }
-          : {
-              background: "rgba(255, 255, 255, 0.03)", // Glass oscuro
-              color: "var(--text)",
-              border: "1px solid var(--border-light)",
-              backdropFilter: "blur(10px)", // Efecto vidrio
-            }
-      }
+      whileHover={{ scale: 1.03, translateY: -2 }}
+      whileTap={{ scale: 0.97 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+      className={className}
+      style={primary ? primaryStyle : secondaryStyle}
     >
-      {/* Brillo interno sutil para efecto 3D en el botón primario */}
-      {primary && (
-        <div 
-          className="absolute inset-0 bg-white opacity-20"
-          style={{ mixBlendMode: "overlay" }} 
-        />
-      )}
-      
-      <span className="relative z-10 flex items-center gap-2">
-        {children}
-      </span>
-    </Motion.button>
-  );
+      {children}
+    </Motion.a>
+  )
 }

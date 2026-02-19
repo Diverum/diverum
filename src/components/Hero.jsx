@@ -1,562 +1,405 @@
-import { motion as Motion, AnimatePresence } from "motion/react";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { motion as Motion, animate } from "framer-motion";
+import { useRef, useState, useEffect } from "react";
 import Badge from "./ui/Badge";
 import MagneticBtn from "./ui/MagneticBtn";
 
-/* ═══════════════════════════════════════════ */
-/* ══  NEURAL NETWORK CANVAS BACKGROUND   ══ */
-/* ═══════════════════════════════════════════ */
-
-const NeuralNetwork = () => {
-  const canvasRef = useRef(null);
-  const mouseRef = useRef({ x: -1000, y: -1000 });
-  const nodesRef = useRef([]);
-  const animFrameRef = useRef(null);
-
-  const initNodes = useCallback((width, height) => {
-    const count = Math.floor((width * height) / 18000);
-    const nodes = [];
-    for (let i = 0; i < Math.min(count, 80); i++) {
-      nodes.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
-        radius: Math.random() * 1.5 + 0.8,
-        baseAlpha: Math.random() * 0.3 + 0.15,
-        pulseSpeed: Math.random() * 0.02 + 0.01,
-        pulseOffset: Math.random() * Math.PI * 2,
-      });
-    }
-    return nodes;
-  }, []);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    let width, height;
-
-    const resize = () => {
-      const dpr = window.devicePixelRatio || 1;
-      const rect = canvas.parentElement.getBoundingClientRect();
-      width = rect.width;
-      height = rect.height;
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
-      canvas.style.width = width + "px";
-      canvas.style.height = height + "px";
-      ctx.scale(dpr, dpr);
-      nodesRef.current = initNodes(width, height);
-    };
-
-    const handleMouseMove = (e) => {
-      const rect = canvas.getBoundingClientRect();
-      mouseRef.current = {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-      };
-    };
-
-    const handleMouseLeave = () => {
-      mouseRef.current = { x: -1000, y: -1000 };
-    };
-
-    const draw = (time) => {
-      ctx.clearRect(0, 0, width, height);
-      const nodes = nodesRef.current;
-      const mouse = mouseRef.current;
-      const mouseRadius = 180;
-      const connectionDist = 140;
-
-      for (const node of nodes) {
-        node.x += node.vx;
-        node.y += node.vy;
-        if (node.x < 0 || node.x > width) node.vx *= -1;
-        if (node.y < 0 || node.y > height) node.vy *= -1;
-        node.x = Math.max(0, Math.min(width, node.x));
-        node.y = Math.max(0, Math.min(height, node.y));
-
-        const dx = mouse.x - node.x;
-        const dy = mouse.y - node.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < mouseRadius && dist > 0) {
-          const force = (mouseRadius - dist) / mouseRadius;
-          node.x += dx * force * 0.008;
-          node.y += dy * force * 0.008;
-        }
-      }
-
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-          const dx = nodes[i].x - nodes[j].x;
-          const dy = nodes[i].y - nodes[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < connectionDist) {
-            const alpha = (1 - dist / connectionDist) * 0.15;
-            const midX = (nodes[i].x + nodes[j].x) / 2;
-            const midY = (nodes[i].y + nodes[j].y) / 2;
-            const mDx = mouse.x - midX;
-            const mDy = mouse.y - midY;
-            const mDist = Math.sqrt(mDx * mDx + mDy * mDy);
-            const boost = mDist < mouseRadius ? (1 - mDist / mouseRadius) * 0.6 : 0;
-            const finalAlpha = alpha + boost;
-
-            ctx.strokeStyle = boost > 0.1
-              ? `rgba(200, 255, 0, ${finalAlpha})`
-              : `rgba(138, 166, 163, ${finalAlpha})`;
-            ctx.lineWidth = boost > 0.1 ? 1 : 0.5;
-            ctx.beginPath();
-            ctx.moveTo(nodes[i].x, nodes[i].y);
-            ctx.lineTo(nodes[j].x, nodes[j].y);
-            ctx.stroke();
-          }
-        }
-      }
-
-      for (const node of nodes) {
-        const pulse = Math.sin(time * node.pulseSpeed + node.pulseOffset) * 0.5 + 0.5;
-        const dx = mouse.x - node.x;
-        const dy = mouse.y - node.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        const near = dist < mouseRadius;
-
-        const alpha = near
-          ? node.baseAlpha + (1 - dist / mouseRadius) * 0.7
-          : node.baseAlpha + pulse * 0.15;
-        const radius = near
-          ? node.radius + (1 - dist / mouseRadius) * 2
-          : node.radius + pulse * 0.5;
-
-        if (near) {
-          ctx.beginPath();
-          ctx.arc(node.x, node.y, radius + 4, 0, Math.PI * 2);
-          const glow = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, radius + 4);
-          glow.addColorStop(0, `rgba(200, 255, 0, ${alpha * 0.3})`);
-          glow.addColorStop(1, "rgba(200, 255, 0, 0)");
-          ctx.fillStyle = glow;
-          ctx.fill();
-        }
-
-        ctx.beginPath();
-        ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
-        ctx.fillStyle = near
-          ? `rgba(200, 255, 0, ${alpha})`
-          : `rgba(138, 166, 163, ${alpha})`;
-        ctx.fill();
-      }
-
-      animFrameRef.current = requestAnimationFrame(draw);
-    };
-
-    resize();
-    window.addEventListener("resize", resize);
-    canvas.addEventListener("mousemove", handleMouseMove);
-    canvas.addEventListener("mouseleave", handleMouseLeave);
-    animFrameRef.current = requestAnimationFrame(draw);
-
-    return () => {
-      window.removeEventListener("resize", resize);
-      canvas.removeEventListener("mousemove", handleMouseMove);
-      canvas.removeEventListener("mouseleave", handleMouseLeave);
-      cancelAnimationFrame(animFrameRef.current);
-    };
-  }, [initNodes]);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 w-full h-full"
-      style={{ zIndex: 0 }}
-    />
-  );
+/* ─── Palette ─────────────────────────────────────────────── */
+const C = {
+  eggshell: "#F0EAD6",
+  sage:     "#D6CCB0",
+  midSage:  "#8A9E8D",
+  deepSage: "#3D5140",
+  charcoal: "#1E231E",
+  white:    "#FFFFFF",
 };
 
-/* ═══════════════════════════════════════════ */
-/* ══  ANIMATION VARIANTS                  ══ */
-/* ═══════════════════════════════════════════ */
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.12, delayChildren: 0.2 },
+/* ─── Data ─────────────────────────────────────────────────── */
+const capabilities = [
+  {
+    label: "Agentes Autónomos",
+    desc:  "Procesos que se ejecutan solos, 24/7, sin supervisión.",
+    icon:  (
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.4" className="w-4 h-4">
+        <circle cx="10" cy="10" r="3" />
+        <path d="M10 2v3M10 15v3M2 10h3M15 10h3" />
+        <path d="M4.93 4.93l2.12 2.12M12.95 12.95l2.12 2.12M4.93 15.07l2.12-2.12M12.95 7.05l2.12-2.12" />
+      </svg>
+    ),
   },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] },
+  {
+    label: "Arquitectura de Datos",
+    desc:  "Flujos limpios entre herramientas, sin fricciones.",
+    icon:  (
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.4" className="w-4 h-4">
+        <rect x="2" y="3" width="5" height="5" rx="1" />
+        <rect x="13" y="3" width="5" height="5" rx="1" />
+        <rect x="7.5" y="12" width="5" height="5" rx="1" />
+        <path d="M4.5 8v2.5H10M15.5 8v2.5H10M10 10.5V12" />
+      </svg>
+    ),
   },
-};
+  {
+    label: "Integración Total",
+    desc:  "CRM, ERP, facturación y más, sincronizados en tiempo real.",
+    icon:  (
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.4" className="w-4 h-4">
+        <path d="M2 10c0-4.4 3.6-8 8-8s8 3.6 8 8-3.6 8-8 8" />
+        <path d="M10 6v4l3 3" />
+        <path d="M2 14h4M4 12v4" />
+      </svg>
+    ),
+  },
+  {
+    label: "Consultoría de Impacto",
+    desc:  "Diagnóstico real, soluciones medibles. Sin hype.",
+    icon:  (
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.4" className="w-4 h-4">
+        <path d="M3 14l4-4 3 3 4-5 3 3" />
+        <path d="M17 5h-4M17 5v4" />
+      </svg>
+    ),
+  },
+];
 
-/* ═══════════════════════════════════════════ */
-/* ══  SHOWCASE SUBCOMPONENTS              ══ */
-/* ═══════════════════════════════════════════ */
-
-const ToolNode = ({ icon, label, delay = 0 }) => (
-  <Motion.div
-    initial={{ opacity: 0, scale: 0.7, y: 10 }}
-    animate={{ opacity: 1, scale: 1, y: 0 }}
-    transition={{ delay: 1.4 + delay, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-    whileHover={{ scale: 1.06, y: -4, transition: { duration: 0.25 } }}
-    className="group relative flex flex-col items-center gap-2.5 p-4 md:p-5 rounded-2xl border cursor-default"
-    style={{ background: "var(--bg)", borderColor: "var(--border)" }}
-  >
-    <div
-      className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-      style={{ background: "radial-gradient(circle at 50% 50%, var(--accent-glow), transparent 70%)" }}
-    />
-    <div
-      className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-      style={{ boxShadow: "inset 0 0 0 1px var(--accent)" }}
-    />
-    <span className="text-2xl md:text-3xl relative z-10">{icon}</span>
-    <span
-      className="text-[10px] md:text-xs font-semibold uppercase tracking-wider relative z-10 group-hover:text-[var(--accent)] transition-colors duration-300"
-      style={{ color: "var(--text-dim)" }}
-    >
-      {label}
-    </span>
-  </Motion.div>
-);
-
-const AgentHub = () => (
-  <Motion.div
-    initial={{ opacity: 0, scale: 0.4 }}
-    animate={{ opacity: 1, scale: 1 }}
-    transition={{ delay: 1.2, duration: 1, ease: [0.22, 1, 0.36, 1] }}
-    className="relative flex items-center justify-center w-40 h-40 md:w-52 md:h-52"
-  >
-    <Motion.div
-      animate={{ rotate: 360 }}
-      transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-      className="absolute w-40 h-40 md:w-52 md:h-52 rounded-full"
-      style={{ border: "1px dashed var(--border)" }}
-    >
-      <div
-        className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full"
-        style={{ background: "var(--accent)", boxShadow: "0 0 8px var(--accent)" }}
-      />
-    </Motion.div>
-
-    <Motion.div
-      animate={{ rotate: -360 }}
-      transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-      className="absolute w-28 h-28 md:w-36 md:h-36 rounded-full"
-      style={{ border: "1px solid var(--border)" }}
-    >
-      <div
-        className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full"
-        style={{ background: "var(--accent)", opacity: 0.6 }}
-      />
-    </Motion.div>
-
-    <Motion.div
-      animate={{
-        boxShadow: [
-          "0 0 0 0 rgba(200,255,0,0)",
-          "0 0 40px 8px rgba(200,255,0,0.06)",
-          "0 0 0 0 rgba(200,255,0,0)",
-        ],
-      }}
-      transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-      className="absolute w-20 h-20 md:w-24 md:h-24 rounded-full"
-      style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
-    />
-
-    <Motion.div
-      animate={{ y: [0, -5, 0] }}
-      transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-      className="relative z-10 w-16 h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center"
-      style={{
-        background: "var(--gradient)",
-        boxShadow: "0 8px 40px rgba(200,255,0,0.15), 0 0 0 1px rgba(200,255,0,0.2)",
-      }}
-    >
-      <span className="text-3xl md:text-4xl">⚡</span>
-    </Motion.div>
-
-    {["left", "right"].map((side) => (
-      <Motion.div
-        key={side}
-        className="hidden md:block absolute top-1/2 -translate-y-1/2"
-        style={{ [side]: "-52px" }}
-        animate={{ opacity: [0.2, 0.8, 0.2], x: side === "left" ? [4, 0, 4] : [-4, 0, -4] }}
-        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <svg width="28" height="2" viewBox="0 0 28 2">
-          <line x1="0" y1="1" x2="28" y2="1" stroke="var(--accent)" strokeWidth="1" strokeDasharray="4 3" />
-        </svg>
-      </Motion.div>
-    ))}
-  </Motion.div>
-);
-
-const MetricPanel = () => {
-  const [count, setCount] = useState(0);
+/* ─── Live Ticker Number ───────────────────────────────────── */
+const LiveTicker = ({ value, suffix }) => {
+  const [display, setDisplay] = useState(0);
+  const inited = useRef(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      let start = 0;
-      const step = (ts) => {
-        if (!start) start = ts;
-        const p = Math.min((ts - start) / 2000, 1);
-        setCount(Math.floor((1 - Math.pow(1 - p, 3)) * 80));
-        if (p < 1) requestAnimationFrame(step);
-      };
-      requestAnimationFrame(step);
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, []);
+    if (inited.current) return;
+    inited.current = true;
+    const controls = animate(0, value, {
+      duration: 2,
+      delay: 1.2,
+      ease: [0.16, 1, 0.3, 1],
+      onUpdate: (v) => setDisplay(Math.floor(v)),
+    });
+    return controls.stop;
+  }, [value]);
 
-  return (
-    <Motion.div
-      initial={{ opacity: 0, x: 30 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: 1.6, duration: 0.9 }}
-      className="flex flex-col items-center md:items-end gap-3"
-    >
-      <div className="flex items-baseline gap-0.5">
-        <span
-          className="text-5xl md:text-7xl font-bold leading-none"
-          style={{ color: "var(--accent)", fontFamily: "'Space Mono', monospace" }}
-        >
-          +{count}
-        </span>
-        <span className="text-2xl md:text-3xl font-bold" style={{ color: "var(--accent)" }}>%</span>
-      </div>
-      <span className="text-[10px] uppercase tracking-[0.2em] font-medium" style={{ color: "var(--text-dim)" }}>
-        Eficiencia Operativa
-      </span>
-      <div className="flex items-end gap-[3px] h-8 mt-1">
-        {[25, 40, 35, 55, 48, 72, 65, 88, 80].map((h, i) => (
-          <Motion.div
-            key={i}
-            initial={{ height: 0 }}
-            animate={{ height: `${h}%` }}
-            transition={{ delay: 2.2 + i * 0.08, duration: 0.5, ease: "easeOut" }}
-            className="w-[5px] rounded-full"
-            style={{ background: i >= 7 ? "var(--accent)" : "var(--border-light)" }}
-          />
-        ))}
-      </div>
-      <Motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2.8 }}
-        className="flex items-center gap-2 mt-1"
-      >
-        <Motion.div
-          animate={{ scale: [1, 1.4, 1], opacity: [0.6, 1, 0.6] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="w-1.5 h-1.5 rounded-full"
-          style={{ background: "var(--accent)" }}
-        />
-        <span className="text-[10px]" style={{ color: "var(--text-dim)" }}>Agentes activos</span>
-      </Motion.div>
-    </Motion.div>
-  );
+  return <>{display}{suffix}</>;
 };
 
-const StatusTicker = () => {
-  const statuses = [
-    { text: "Lead capturado → CRM actualizado", icon: "🎯" },
-    { text: "Inventario sincronizado con Shopify", icon: "📦" },
-    { text: "Reporte semanal generado y enviado", icon: "📊" },
-    { text: "3 facturas procesadas automáticamente", icon: "💰" },
-    { text: "Anomalía detectada → alerta enviada", icon: "🚨" },
-  ];
-  const [idx, setIdx] = useState(0);
+/* ─── System Panel (right side) ────────────────────────────── */
+const SystemPanel = () => {
+  const [activeLine, setActiveLine] = useState(-1);
 
   useEffect(() => {
-    const iv = setInterval(() => setIdx((p) => (p + 1) % statuses.length), 3000);
+    let i = 0;
+    const iv = setInterval(() => {
+      setActiveLine(i % capabilities.length);
+      i++;
+    }, 1400);
     return () => clearInterval(iv);
   }, []);
 
   return (
     <Motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 2.6, duration: 0.6 }}
-      className="w-full flex justify-center mt-6"
+      initial={{ opacity: 0, x: 40 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.9, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      className="relative w-full rounded-3xl overflow-hidden"
+      style={{ background: C.charcoal }}
     >
+      {/* Ambient glow inside panel */}
       <div
-        className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full overflow-hidden"
-        style={{ background: "var(--bg)", border: "1px solid var(--border)" }}
+        className="absolute -top-20 -right-20 w-64 h-64 rounded-full pointer-events-none"
+        style={{ background: C.deepSage, filter: "blur(80px)", opacity: 0.3 }}
+      />
+
+      {/* Panel header */}
+      <div
+        className="relative z-10 flex items-center justify-between px-7  py-5"
+        style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}
       >
-        <Motion.div
-          animate={{ rotate: [0, 360] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-          className="w-1.5 h-1.5 rounded-full shrink-0"
-          style={{ background: "var(--accent)", boxShadow: "0 0 6px var(--accent)" }}
-        />
-        <AnimatePresence mode="wait">
+        <div className="flex items-center gap-2.5">
+          <span
+            className="w-2 h-2 rounded-full"
+            style={{ background: C.midSage, boxShadow: `0 0 8px ${C.midSage}` }}
+          />
           <Motion.span
-            key={idx}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.3 }}
-            className="text-xs font-medium whitespace-nowrap"
-            style={{ color: "var(--text-muted)" }}
+            className="text-[10px] font-black uppercase tracking-[0.25em]"
+            style={{ color: "rgba(255,255,255,0.35)" }}
           >
-            {statuses[idx].icon} {statuses[idx].text}
+            Sistema activo
           </Motion.span>
-        </AnimatePresence>
+        </div>
+        <span
+          className="text-[9px] font-bold uppercase tracking-widest"
+          style={{ color: "rgba(255,255,255,0.15)" }}
+        >
+          24 / 7
+        </span>
+      </div>
+
+      {/* Capabilities list */}
+      <div className="relative z-10 px-7 py-6 space-y-1">
+        {capabilities.map((cap, i) => (
+          <div key={i}>
+            <Motion.div
+              className="flex items-start gap-4 py-4 px-4 rounded-xl cursor-default"
+              animate={{
+                background: activeLine === i
+                  ? "rgba(255,255,255,0.07)"
+                  : "transparent",
+              }}
+              transition={{ duration: 0.4 }}
+            >
+              {/* Icon + connector */}
+              <div className="flex flex-col items-center gap-0 shrink-0">
+                <Motion.div
+                  className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                  animate={{
+                    background: activeLine === i ? C.deepSage : "rgba(255,255,255,0.05)",
+                    color: activeLine === i ? C.eggshell : C.midSage,
+                  }}
+                  transition={{ duration: 0.4 }}
+                >
+                  {cap.icon}
+                </Motion.div>
+              </div>
+
+              <div className="flex-1 min-w-0">
+                <Motion.p
+                  className="text-sm font-bold leading-tight"
+                  animate={{
+                    color: activeLine === i ? C.white : "rgba(255,255,255,0.5)",
+                  }}
+                  transition={{ duration: 0.4 }}
+                >
+                  {cap.label}
+                </Motion.p>
+                <Motion.p
+                  className="text-xs mt-0.5 leading-relaxed"
+                  animate={{
+                    color: activeLine === i
+                      ? "rgba(255,255,255,0.5)"
+                      : "rgba(255,255,255,0.2)",
+                  }}
+                  transition={{ duration: 0.4 }}
+                >
+                  {cap.desc}
+                </Motion.p>
+              </div>
+
+              {/* Active indicator */}
+              <Motion.div
+                className="w-1.5 h-1.5 rounded-full shrink-0 mt-1.5"
+                animate={{
+                  background: activeLine === i ? C.midSage : "rgba(255,255,255,0.08)",
+                  boxShadow: activeLine === i ? `0 0 8px ${C.midSage}` : "none",
+                }}
+                transition={{ duration: 0.4 }}
+              />
+            </Motion.div>
+
+            {/* Connector line between items */}
+            {i < capabilities.length - 1 && (
+              <div
+                className="ml-8 w-px h-3"
+                style={{ background: "rgba(255,255,255,0.05)", marginLeft: "2.25rem" }}
+              />
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Panel footer: metrics */}
+      <div
+        className="relative z-10 grid grid-cols-2 gap-px"
+        style={{ borderTop: "1px solid rgba(255,255,255,0.05)", background: "rgba(255,255,255,0.03)" }}
+      >
+        {[
+          { value: 40, suffix: "h", label: "ahorradas / semana" },
+          { value: 3,  suffix: "×", label: "retorno promedio" },
+        ].map((m, i) => (
+          <div key={i} className="px-7 py-5" style={{ background: C.charcoal }}>
+            <p
+              className="text-2xl font-bold tracking-tight"
+              style={{
+                color: C.sage,
+                fontFamily: "'Playfair Display', Georgia, serif",
+              }}
+            >
+              <LiveTicker value={m.value} suffix={m.suffix} />
+            </p>
+            <p
+              className="text-[10px] uppercase tracking-widest mt-1"
+              style={{ color: "rgba(255,255,255,0.2)" }}
+            >
+              {m.label}
+            </p>
+          </div>
+        ))}
       </div>
     </Motion.div>
   );
 };
 
-const ToolChip = ({ icon, label }) => (
-  <Motion.div
-    whileHover={{ y: -3, backgroundColor: "var(--surface-hover)" }}
-    className="flex items-center gap-2 px-3 py-2 md:px-4 md:py-2.5 rounded-full text-xs md:text-sm border transition-all duration-300"
-    style={{ background: "var(--surface)", borderColor: "var(--border)", color: "var(--text-muted)" }}
-  >
-    <span>{icon}</span>
-    <span className="font-medium">{label}</span>
-  </Motion.div>
-);
-
-/* ════════════════════════════════════════ */
-/* ══  HERO MAIN COMPONENT             ══ */
-/* ════════════════════════════════════════ */
-
+/* ─── Main Export ──────────────────────────────────────────── */
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex flex-col justify-center pt-12 md:pt-16 pb-16 overflow-hidden bg-[var(--bg)]">
-      {/* Neural Network Background */}
-      <div className="absolute inset-0 pointer-events-auto">
-        <NeuralNetwork />
-      </div>
-
-      {/* Gradient orbs + vignette for readability */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 1 }}>
-        <div
-          className="absolute -top-[10%] -left-[10%] w-[70vw] h-[70vw] md:w-[45rem] md:h-[45rem] rounded-full blur-[140px] opacity-[0.07]"
-          style={{ background: "#8AA6A3" }}
+    <section
+      className="relative min-h-screen flex flex-col justify-center py-20 md:py-0 overflow-hidden"
+      style={{ background: C.eggshell }}
+    >
+      {/* ── Background ── */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Organic blobs */}
+        <Motion.div
+          className="absolute rounded-full"
+          style={{
+            top: "-20%", right: "-12%",
+            width: "55vw", height: "55vw",
+            background: C.deepSage,
+            filter: "blur(150px)",
+            opacity: 0.15,
+          }}
+          animate={{ scale: [1, 1.08, 1], rotate: [0, 8, 0] }}
+          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
         />
-        <div
-          className="absolute top-[30%] -right-[15%] w-[60vw] h-[60vw] md:w-[35rem] md:h-[35rem] rounded-full blur-[140px] opacity-[0.07]"
-          style={{ background: "var(--accent)" }}
+        <Motion.div
+          className="absolute rounded-full"
+          style={{
+            bottom: "-15%", left: "-8%",
+            width: "45vw", height: "45vw",
+            background: C.sage,
+            filter: "blur(120px)",
+            opacity: 0.5,
+          }}
+          animate={{ scale: [1, 1.12, 1] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
         />
+        {/* Subtle grid */}
         <div
           className="absolute inset-0"
-          style={{ background: "radial-gradient(ellipse at 30% 20%, rgba(10,10,11,0.4) 0%, rgba(10,10,11,0.85) 70%)" }}
+          style={{
+            backgroundImage: `linear-gradient(${C.deepSage}18 1px, transparent 1px), linear-gradient(90deg, ${C.deepSage}18 1px, transparent 1px)`,
+            backgroundSize: "64px 64px",
+          }}
         />
       </div>
 
-      {/* Content */}
-      <div className="max-w-7xl mx-auto  lg:px-8 relative w-full mt-0 md:mt-4" style={{ zIndex: 2 }}>
+      <div className="relative z-10 max-w-6xl mx-auto px-5 sm:px-8 w-full">
+
+        {/* ── Badge ── */}
         <Motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="flex flex-col items-center md:items-start"
+          initial={{ opacity: 0, y: -12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="mb-8 md:mt-8 flex justify-center lg:justify-start"
         >
-
-          {/* Hero section */}
-          <Motion.h1
-            variants={itemVariants}
-            className="mt-8 text-4xl sm:text-6xl md:text-[5.5rem] font-bold leading-[1.08] tracking-tighter text-center md:text-left"
-          >
-            Diverum Labs
-            <br className="hidden md:block" />
-            <span
-              className="italic font-light"
-              style={{ fontFamily: "'Instrument Serif', serif", color: "var(--accent)" }}
-            >
-              Automatización con IA para empresas
-            </span>
-          </Motion.h1>
-
-          <Motion.p
-            variants={itemVariants}
-            className="mt-6 text-base md:text-lg text-center md:text-left max-w-2xl leading-relaxed"
-            style={{ color: "var(--text-muted)" }}
-          >
-            Diverum Labs ayuda a compañías a integrar inteligencia artificial y eliminar procesos manuales.
-          </Motion.p>
-
-          <Motion.div
-            variants={itemVariants}
-            className="mt-10 flex flex-col sm:flex-row gap-4 w-full sm:w-auto"
-          >
-            <MagneticBtn primary>Agendar Consultoría →</MagneticBtn>
-            <MagneticBtn>Ver servicios</MagneticBtn>
-          </Motion.div>
-
-          {/* VISUAL SHOWCASE */}
-         {/*  <Motion.div variants={itemVariants} className="mt-16 md:mt-20 w-full">
-            <div
-              className="rounded-3xl p-[1px]"
-              style={{ background: "linear-gradient(180deg, var(--border-light) 0%, transparent 50%)" }}
-            >
-              <div
-                className="rounded-[calc(1.5rem-1px)] p-6 md:p-10 lg:p-12 relative overflow-hidden"
-                style={{ background: "var(--surface)" }}
-              >
-                <div
-                  className="absolute inset-0 opacity-[0.04] pointer-events-none"
-                  style={{
-                    backgroundImage: "radial-gradient(var(--text-dim) 1px, transparent 1px)",
-                    backgroundSize: "24px 24px",
-                  }}
-                />
-
-                <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 md:gap-10 lg:gap-16">
-                  <div className="grid grid-cols-2 gap-3 w-full md:w-auto md:min-w-[200px]">
-                    {[
-                      { icon: "🛍️", label: "Shopify", delay: 0 },
-                      { icon: "🔗", label: "n8n", delay: 0.12 },
-                      { icon: "⚡", label: "Make", delay: 0.24 },
-                      { icon: "🤖", label: "OpenAI", delay: 0.36 },
-                    ].map((t) => (
-                      <ToolNode key={t.label} {...t} />
-                    ))}
-                  </div>
-
-                  <div className="relative flex flex-col items-center py-4 md:py-0 md:flex-1 md:flex md:justify-center">
-                    <AgentHub />
-                  </div>
-
-                  <div className="md:min-w-[180px]">
-                    <MetricPanel />
-                  </div>
-                </div>
-
-                <StatusTicker />
-
-                <Motion.div
-                  className="absolute bottom-0 left-0 right-0 h-[1px]"
-                  style={{ background: "var(--gradient)" }}
-                  initial={{ scaleX: 0, transformOrigin: "left" }}
-                  animate={{ scaleX: 1 }}
-                  transition={{ delay: 1.8, duration: 2, ease: "easeOut" }}
-                />
-              </div>
-            </div>
-          </Motion.div> */}
-
-          {/* Tags */}
-          <Motion.div variants={itemVariants} className="mt-12 w-full">
-            <div className="flex flex-wrap justify-center md:justify-start gap-3">
-              {[
-                { icon: "🤖", label: "Agentes personalizados" },
-                { icon: "📈", label: "Escala tu negocio" },
-                { icon: "🧠", label: "Consultoría de IA" },
-                { icon: "⚙️", label: "Automatización de procesos" },
-              ].map((item) => (
-                <ToolChip key={item.label} icon={item.icon} label={item.label} />
-              ))}
-            </div>
-          </Motion.div>
+          <Badge>Laboratorio de Automatización</Badge>
         </Motion.div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 xl:gap-20 items-center md:mb-8">
+
+          {/* ── LEFT: Copy ── */}
+          <div className="lg:col-span-6 text-center lg:text-left">
+
+            {/* Headline */}
+            <Motion.h1
+              initial={{ opacity: 0, y: 32 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+              className="font-bold tracking-tight leading-[0.88]"
+              style={{
+                color: C.charcoal,
+                fontSize: "clamp(3.5rem, 9vw, 6.5rem)",
+                fontFamily: "'Playfair Display', Georgia, serif",
+              }}
+            >
+              Opera menos.
+              <br />
+              <Motion.span
+                className="italic font-light block"
+                style={{ color: C.deepSage }}
+                initial={{ opacity: 0, x: -16 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.45 }}
+              >
+                Escala más.
+              </Motion.span>
+            </Motion.h1>
+
+            {/* Subhead */}
+            <Motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.9, delay: 0.6 }}
+              className="mt-8 text-lg md:text-xl leading-relaxed max-w-lg mx-auto lg:mx-0"
+              style={{ color: `${C.charcoal}99` }}
+            >
+              Construimos la infraestructura lógica que libera a los fundadores de la operación. Tu equipo toma decisiones. La IA ejecuta el resto.
+            </Motion.p>
+
+            {/* CTA block */}
+            <Motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.85 }}
+              className="mt-10 flex flex-col sm:flex-row gap-4 items-center justify-center lg:justify-start"
+            >
+              <MagneticBtn primary>
+                <span className="px-3">Agendar diagnóstico gratuito</span>
+              </MagneticBtn>
+
+              <Motion.a
+                href="#metodologia"
+                className="group flex items-center gap-3 text-[11px] font-black uppercase tracking-[0.2em]"
+                style={{ color: C.charcoal, textDecoration: "none" }}
+                whileHover={{ gap: "16px" }}
+              >
+                <Motion.span
+                  className="block h-px"
+                  style={{ background: C.deepSage, width: 28 }}
+                  whileHover={{ width: 48 }}
+                  transition={{ duration: 0.3 }}
+                />
+                Ver metodología
+              </Motion.a>
+            </Motion.div>
+
+            {/* Horizontal stat strip */}
+            <Motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.3, duration: 0.8 }}
+              className="mt-14 md:mb-8 pt-8 flex items-center justify-center lg:justify-start gap-10"
+              style={{ borderTop: `1px solid ${C.sage}` }}
+            >
+              {[
+                { val: "+40", unit: "h/sem", label: "recuperadas" },
+                { val: "3×",  unit: "ROI",   label: "promedio" },
+                { val: "99",  unit: "%",     label: "precisión" },
+              ].map((s, i) => (
+                <div key={i} className="text-center lg:text-left">
+                  <p
+                    className="text-2xl font-bold tracking-tight leading-none"
+                    style={{ color: C.charcoal, fontFamily: "'Playfair Display', Georgia, serif" }}
+                  >
+                    {s.val}
+                    <span className="text-base ml-0.5" style={{ color: C.deepSage }}>
+                      {s.unit}
+                    </span>
+                  </p>
+                  <p
+                    className="text-[9px] uppercase tracking-widest mt-1"
+                    style={{ color: `${C.charcoal}55` }}
+                  >
+                    {s.label}
+                  </p>
+                </div>
+              ))}
+            </Motion.div>
+          </div>
+
+          {/* ── RIGHT: System Panel ── */}
+          <div className="lg:col-span-6">
+            <SystemPanel />
+          </div>
+        </div>
       </div>
     </section>
   );
