@@ -346,7 +346,7 @@ export default function Hero() {
               </MagneticBtn>
 
               <Motion.a
-                href="#metodologia"
+                href="/metodologia"
                 className="group flex items-center gap-3 text-[11px] font-black uppercase tracking-[0.2em]"
                 style={{ color: C.charcoal, textDecoration: "none" }}
                 whileHover={{ gap: "16px" }}
