@@ -71,6 +71,19 @@
 </head>
 
 <body>
+<script>
+  (function (l) {
+    if (l.search[1] === '/') {
+      const decoded = l.search
+        .slice(1)
+        .split('&')
+        .map((s) => s.replace(/~and~/g, '&'))
+        .join('?');
+      window.history.replaceState(null, '', decoded + l.hash);
+    }
+  })(window.location);
+</script>
+
 <!--
   Root mounting point for the React application.
   React will take over this div and render the entire UI inside it.

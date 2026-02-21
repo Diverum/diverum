@@ -341,7 +341,7 @@ export default function Hero() {
               transition={{ duration: 0.7, delay: 0.85 }}
               className="mt-10 flex flex-col sm:flex-row gap-4 items-center justify-center lg:justify-start"
             >
-              <MagneticBtn primary href="/agendar">
+              <MagneticBtn primary href="https://diverum.com/agendar">
                 <span className="px-3">Agendar diagnóstico gratuito</span>
               </MagneticBtn>
 
