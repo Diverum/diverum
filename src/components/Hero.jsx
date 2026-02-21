@@ -310,7 +310,7 @@ export default function Hero() {
                 fontFamily: "'Playfair Display', Georgia, serif",
               }}
             >
-              Opera menos.
+              Diverum Labs
               <br />
               <Motion.span
                 className="italic font-light block"
@@ -331,7 +331,7 @@ export default function Hero() {
               className="mt-8 text-lg md:text-xl leading-relaxed max-w-lg mx-auto lg:mx-0"
               style={{ color: `${C.charcoal}99` }}
             >
-              Construimos la infraestructura lógica que libera a los fundadores de la operación. Tu equipo toma decisiones. La IA ejecuta el resto.
+              Conectamos tus herramientas, eliminamos tareas repetitivas y construimos sistemas que trabajan 24/7 para que tu empresa escale sin aumentar estructura.
             </Motion.p>
 
             {/* CTA block */}
@@ -359,39 +359,6 @@ export default function Hero() {
                 />
                 Ver metodología
               </Motion.a>
-            </Motion.div>
-
-            {/* Horizontal stat strip */}
-            <Motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1.3, duration: 0.8 }}
-              className="mt-14 md:mb-8 pt-8 flex items-center justify-center lg:justify-start gap-10"
-              style={{ borderTop: `1px solid ${C.sage}` }}
-            >
-              {[
-                { val: "+40", unit: "h/sem", label: "recuperadas" },
-                { val: "3×",  unit: "ROI",   label: "promedio" },
-                { val: "99",  unit: "%",     label: "precisión" },
-              ].map((s, i) => (
-                <div key={i} className="text-center lg:text-left">
-                  <p
-                    className="text-2xl font-bold tracking-tight leading-none"
-                    style={{ color: C.charcoal, fontFamily: "'Playfair Display', Georgia, serif" }}
-                  >
-                    {s.val}
-                    <span className="text-base ml-0.5" style={{ color: C.deepSage }}>
-                      {s.unit}
-                    </span>
-                  </p>
-                  <p
-                    className="text-[9px] uppercase tracking-widest mt-1"
-                    style={{ color: `${C.charcoal}55` }}
-                  >
-                    {s.label}
-                  </p>
-                </div>
-              ))}
             </Motion.div>
           </div>
 
