@@ -43,7 +43,7 @@ const articles = [
 ];
 
 /* ─── Article Card ─────────────────────────────────────────── */
-const ArticleCard = ({ tag, num, title, excerpt, readTime, accent, index }) => {
+const ArticleCard = ({ tag, num, title, excerpt, readTime, accent }) => {
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -150,121 +150,6 @@ const ArticleCard = ({ tag, num, title, excerpt, readTime, accent, index }) => {
   );
 };
 
-/* ─── Newsletter ───────────────────────────────────────────── */
-const Newsletter = () => {
-  const [email, setEmail]         = useState("");
-  const [subscribed, setSubscribed] = useState(false);
-  const [focused, setFocused]     = useState(false);
-
-  const handleSubscribe = (e) => {
-    e.preventDefault();
-    if (email.includes("@")) setSubscribed(true);
-  };
-
-  return (
-    <Reveal delay={0.3}>
-      <div
-        className="relative mt-20 md:mt-28 rounded-[2.5rem] overflow-hidden"
-        style={{ background: C.charcoal }}
-      >
-        {/* Organic blob */}
-        <Motion.div
-          className="absolute -top-24 -right-24 w-72 h-72 rounded-full"
-          style={{ background: C.deepSage, opacity: 0.35, filter: "blur(60px)" }}
-          animate={{ scale: [1, 1.12, 1], rotate: [0, 15, 0] }}
-          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <Motion.div
-          className="absolute -bottom-16 -left-16 w-56 h-56 rounded-full"
-          style={{ background: C.midSage, opacity: 0.2, filter: "blur(50px)" }}
-          animate={{ scale: [1, 1.2, 1] }}
-          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-        />
-
-        <div className="relative z-10 px-8 py-16 md:px-20 md:py-20 flex flex-col md:flex-row md:items-center md:justify-between gap-12">
-          {/* Left copy */}
-          <div className="max-w-sm">
-            <p
-              className="text-[9px] font-black uppercase tracking-[0.25em] mb-5"
-              style={{ color: C.midSage }}
-            >
-              Newsletter semanal
-            </p>
-            <h3
-              className="text-3xl md:text-4xl font-bold leading-[1.15] mb-4"
-              style={{ color: C.white, fontFamily: "'Playfair Display', Georgia, serif" }}
-            >
-              Lógica sin ruido,
-              <br />
-              <span style={{ color: C.midSage, fontStyle: "italic", fontWeight: 300 }}>
-                directo a ti.
-              </span>
-            </h3>
-            <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.45)" }}>
-              Estrategias reales de automatización. Sin hype, sin relleno.
-            </p>
-          </div>
-
-          {/* Right form */}
-          <div className="md:w-auto w-full max-w-sm">
-            {subscribed ? (
-              <Motion.div
-                initial={{ scale: 0.85, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                className="flex items-center gap-3"
-              >
-                <span className="text-2xl">✓</span>
-                <p className="text-sm font-bold" style={{ color: C.eggshell }}>
-                  Bienvenido al laboratorio. Revisa tu bandeja.
-                </p>
-              </Motion.div>
-            ) : (
-              <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3">
-                <Motion.div
-                  className="flex-1 relative"
-                  animate={{ scale: focused ? 1.02 : 1 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <input
-                    type="email"
-                    required
-                    placeholder="tu@empresa.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    onFocus={() => setFocused(true)}
-                    onBlur={() => setFocused(false)}
-                    className="w-full px-5 py-4 rounded-2xl text-sm outline-none transition-all"
-                    style={{
-                      background: "rgba(255,255,255,0.08)",
-                      border: `1px solid ${focused ? C.midSage : "rgba(255,255,255,0.12)"}`,
-                      color: C.white,
-                      caretColor: C.midSage,
-                    }}
-                  />
-                </Motion.div>
-                <Motion.button
-                  type="submit"
-                  whileHover={{ scale: 1.04 }}
-                  whileTap={{ scale: 0.97 }}
-                  className="px-7 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] whitespace-nowrap transition-colors"
-                  style={{ background: C.deepSage, color: C.eggshell }}
-                >
-                  Unirse
-                </Motion.button>
-              </form>
-            )}
-            <p
-              className="mt-4 text-[9px] uppercase tracking-widest"
-              style={{ color: "rgba(255,255,255,0.2)" }}
-            >
-              Cero spam. Solo ingeniería orgánica.
-            </p>
-          </div>
-        </div>
-      </div>
-    </Reveal>
-  );
-};
 
 /* ─── Main Export ──────────────────────────────────────────── */
 export default function Blog() {
@@ -345,9 +230,6 @@ export default function Blog() {
             <ArticleCard key={i} index={i} {...article} />
           ))}
         </Stagger>
-
-        {/* ── Newsletter ── */}
-        <Newsletter />
 
       </div>
     </section>
