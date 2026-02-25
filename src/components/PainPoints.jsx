@@ -214,21 +214,7 @@ export default function PainPoints() {
                 className="text-base md:text-lg leading-relaxed max-w-sm"
                 style={{ color: "rgba(255,255,255,0.4)" }}
               >
-                No es falta de talento. Es falta de sistemas. Identificamos y eliminamos los cuellos de botella que frenan tu crecimiento.
-              </p>
-
-              <div className="mt-10">
-                <MagneticBtn primary>
-                  Eliminar fricción ahora
-                </MagneticBtn>
-              </div>
-
-              {/* Micro-copy below CTA */}
-              <p
-                className="mt-4 text-[10px] uppercase tracking-[0.2em]"
-                style={{ color: "rgba(255,255,255,0.18)" }}
-              >
-                Diagnóstico gratuito · Sin compromiso
+                Identificamos y eliminamos los cuellos de botella que frenan tu crecimiento.
               </p>
             </Reveal>
           </div>
@@ -240,46 +226,6 @@ export default function PainPoints() {
             ))}
           </div>
         </div>
-
-        {/* ── Bottom quote ── */}
-        <Reveal delay={0.4}>
-          <div
-            className="mt-20 md:mt-28 pt-10 flex flex-col sm:flex-row items-center sm:items-end justify-between gap-6"
-            style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
-          >
-            <p
-              className="text-xl md:text-2xl italic font-light max-w-lg leading-relaxed"
-              style={{
-                color: "rgba(255,255,255,0.2)",
-                fontFamily: "'Playfair Display', Georgia, serif",
-              }}
-            >
-              "La complejidad es el enemigo de la ejecución."
-            </p>
-            <Motion.div
-              className="flex items-center gap-3 shrink-0"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.5 }}
-            >
-              <div
-                className="w-8 h-8 rounded-xl flex items-center justify-center"
-                style={{ background: C.deepSage }}
-              >
-                <svg viewBox="0 0 16 16" fill="none" stroke={C.eggshell} strokeWidth="1.4" className="w-3.5 h-3.5">
-                  <path d="M8 2v12M2 8h12" strokeLinecap="round" />
-                </svg>
-              </div>
-              <span
-                className="text-[9px] font-black uppercase tracking-[0.2em]"
-                style={{ color: "rgba(255,255,255,0.2)" }}
-              >
-                Lógica orgánica
-              </span>
-            </Motion.div>
-          </div>
-        </Reveal>
       </div>
     </section>
   );
