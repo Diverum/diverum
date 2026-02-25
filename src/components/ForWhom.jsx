@@ -17,7 +17,7 @@ const C = {
 /* ─── Data ─────────────────────────────────────────────────── */
 const profiles = [
   {
-    num: "01",
+    num: "1",
     title: "Founders escalando",
     desc: "Facturación en crecimiento, estructura que no aguanta. Automatizamos la operación para que crecer no signifique contratar más.",
     icon: (
@@ -27,7 +27,7 @@ const profiles = [
     ),
   },
   {
-    num: "02",
+    num: "2",
     title: "Operaciones en Excel frágil",
     desc: "El proceso vive en la cabeza de alguien o en hojas que nadie entiende. Lo convertimos en sistemas que funcionan solos.",
     icon: (
@@ -37,7 +37,7 @@ const profiles = [
     ),
   },
   {
-    num: "03",
+    num: "3",
     title: "Equipos cansados de hype",
     desc: "Ya pasaron por consultoras de 'transformación digital'. Ahora quieren implementaciones que ahorren horas esta semana.",
     icon: (
@@ -47,7 +47,7 @@ const profiles = [
     ),
   },
   {
-    num: "04",
+    num: "4",
     title: "Líderes sin tiempo de líder",
     desc: "Gerentes que apagan incendios manuales todo el día. Los liberamos para que vuelvan a tomar decisiones de alto nivel.",
     icon: (
