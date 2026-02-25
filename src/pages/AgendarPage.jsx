@@ -64,7 +64,7 @@ export default function AgendarPage() {
             oportunidades concretas de automatizacion.
           </p>
           <Motion.a
-            href="https://calendly.com/sayr/30min"
+            href="/agendar-reunion"
             target="_blank"
             rel="noreferrer"
             whileHover={{ y: -2 }}
