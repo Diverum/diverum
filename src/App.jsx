@@ -8,6 +8,7 @@ import ForWhom from './components/ForWhom'
 import Blog from './components/Blog'
 import FooterPro from './components/FooterPro'
 import AgendarPage from './pages/AgendarPage'
+import AgendarReunionPage from './pages/AgendarReunionPage'
 import MetodologiaPage from './pages/MetodologiaPage'
 
 function App() {
@@ -15,6 +16,10 @@ function App() {
 
   if (cleanPath === '/agendar') {
     return <AgendarPage />
+  }
+
+  if (cleanPath === '/agendar-reunion') {
+    return <AgendarReunionPage />
   }
 
   if (cleanPath === '/metodologia') {
