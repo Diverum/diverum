@@ -42,8 +42,6 @@ const testimonials = [
   },
 ];
 
-const tools = ["n8n", "Make", "OpenAI", "HubSpot", "Stripe", "AWS", "Zapier", "Salesforce"];
-
 /* ─── Animated Counter ─────────────────────────────────────── */
 const AnimatedCounter = ({ target, suffix = "" }) => {
   const ref = useRef(null);
@@ -277,41 +275,6 @@ export default function SocialProof() {
             <TestimonialCard key={i} index={i} {...t} />
           ))}
         </div>
-
-        {/* ── Tech Stack ── */}
-        <Reveal delay={0.3}>
-          <div className="text-center">
-            <p
-              className="text-[9px] font-black uppercase tracking-[0.35em] mb-8"
-              style={{ color: "rgba(255,255,255,0.2)" }}
-            >
-              Infraestructura tecnológica
-            </p>
-            <div className="flex flex-wrap justify-center gap-2 md:gap-3 max-w-3xl mx-auto">
-              {tools.map((tool, i) => (
-                <Motion.span
-                  key={tool}
-                  initial={{ opacity: 0, y: 8 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.3 + i * 0.05 }}
-                  whileHover={{ scale: 1.06, opacity: 1 }}
-                  className="px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest cursor-default"
-                  style={{
-                    background: "rgba(255,255,255,0.03)",
-                    border: "1px solid rgba(255,255,255,0.06)",
-                    color: C.midSage,
-                    opacity: 0.45,
-                    transition: "opacity 0.25s ease",
-                  }}
-                >
-                  {tool}
-                </Motion.span>
-              ))}
-            </div>
-          </div>
-        </Reveal>
-
       </div>
     </section>
   );
