@@ -12,22 +12,22 @@ const COLORS = {
 
 const steps = [
   {
-    number: "01",
-    title: "Auditoría de Datos",
-    desc: "No adivinamos. Mapeamos cada flujo de información para encontrar dónde la IA generará el mayor ROI inmediato.",
-    outcome: "Blueprint Operativo",
+    number: "1",
+    title: "Auditoría de datos",
+    desc: "Mapeamos cada flujo de información para encontrar dónde la IA generará el mayor ROI inmediato.",
+    outcome: "Blueprint operativo",
   },
   {
-    number: "02",
-    title: "Despliegue de Agentes",
-    desc: "Instalamos la arquitectura lógica. Conectamos tus herramientas y lanzamos agentes que ejecutan tareas 24/7.",
-    outcome: "Sistemas Autónomos Activos",
+    number: "2",
+    title: "Despliegue de agentes",
+    desc: "Instalamos la arquitectura lógica. Conectamos tus herramientas y lanzamos agentes que ejecutan tareas las 24 horas del día.",
+    outcome: "Sistemas autónomos activos",
   },
   {
-    number: "03",
-    title: "Transferencia Total",
+    number: "3",
+    title: "Transferencia total",
     desc: "Tu equipo toma el control. Entregamos documentación y optimizamos los flujos para tu independencia total.",
-    outcome: "Independencia Operativa",
+    outcome: "Independencia operativa",
   },
 ];
 
@@ -56,7 +56,7 @@ const StepNode = ({ number, title, desc, outcome, index }) => (
            style={{ backgroundColor: COLORS.deepSage }} />
     </div>
 
-    {/* El Contenido Estructurado */}
+    {/* El contenido estructurado */}
     <div className="md:col-span-10 group">
       <div 
         className="p-8 md:p-10 rounded-[2.5rem] border border-white/40 transition-all duration-500 hover:bg-white/40"
@@ -69,7 +69,7 @@ const StepNode = ({ number, title, desc, outcome, index }) => (
           {desc}
         </p>
         
-        {/* Resultado Tangible (Lo que el cliente compra) */}
+        {/* Resultado tangible (lo que el cliente compra) */}
         <div className="flex items-center gap-3">
           <div className="w-8 h-[1px]" style={{ background: COLORS.deepSage }} />
           <span className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-50" style={{ color: COLORS.charcoal }}>
@@ -105,26 +105,6 @@ export default function Process() {
             <StepNode key={i} index={i} {...step} />
           ))}
         </div>
-
-        {/* CTA de Cierre de Sección */}
-        <Reveal delay={0.6}>
-          <div className="mt-24 text-center">
-            <h4 className="text-xl font-bold mb-8" style={{ color: COLORS.charcoal }}>
-              ¿Listo para el primer Blueprint?
-            </h4>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <button 
-                className="px-10 py-4 rounded-full font-bold text-white shadow-xl hover:scale-105 transition-transform"
-                style={{ background: COLORS.charcoal }}
-              >
-                Agendar Auditoría
-              </button>
-              <p className="text-xs font-medium opacity-40 uppercase tracking-widest">
-                Tiempo estimado: 2-6 semanas
-              </p>
-            </div>
-          </div>
-        </Reveal>
       </div>
     </section>
   );
