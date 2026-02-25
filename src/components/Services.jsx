@@ -290,53 +290,6 @@ export default function Services() {
             <ServiceCard key={i} index={i} {...s} />
           ))}
         </div>
-
-        {/* ── Bottom CTA ── */}
-        <Reveal delay={0.35}>
-          <div
-            className="mt-16 md:mt-24 flex flex-col md:flex-row items-center justify-between gap-8 p-8 md:p-12 rounded-3xl"
-            style={{
-              background: C.charcoal,
-              border: `1px solid rgba(255,255,255,0.05)`,
-            }}
-          >
-            {/* Left */}
-            <div>
-              <p
-                className="text-[9px] font-black uppercase tracking-[0.25em] mb-3"
-                style={{ color: C.midSage }}
-              >
-                Próximo paso
-              </p>
-              <h3
-                className="text-2xl md:text-3xl font-bold leading-tight"
-                style={{
-                  color: C.white,
-                  fontFamily: "'Playfair Display', Georgia, serif",
-                }}
-              >
-                ¿Listo para delegar el caos
-                <br className="hidden sm:block" />
-                <span style={{ color: C.sage, fontStyle: "italic", fontWeight: 300 }}>
-                  {" "}a la lógica?
-                </span>
-              </h3>
-            </div>
-
-            {/* Right */}
-            <div className="shrink-0 flex flex-col items-center md:items-end gap-3">
-              <MagneticBtn primary>
-                Agendar diagnóstico operativo
-              </MagneticBtn>
-              <p
-                className="text-[9px] uppercase tracking-widest"
-                style={{ color: "rgba(255,255,255,0.18)" }}
-              >
-                Gratuito · Sin compromiso
-              </p>
-            </div>
-          </div>
-        </Reveal>
       </div>
     </section>
   );
