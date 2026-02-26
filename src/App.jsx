@@ -13,7 +13,22 @@ import MetodologiaPage from './pages/MetodologiaPage'
 import NotFoundPage from './pages/NotFoundPage'
 
 function App() {
-  const cleanPath = window.location.pathname.replace(/\/+$/, '') || '/'
+  const { pathname, search } = window.location
+
+  let resolvedPath = pathname
+
+  // Supports SPA fallback URLs like `?/<route>` and `?%2F<route>` used by static hosts.
+  if (pathname === '/' && /^\?(\/|%2F)/i.test(search)) {
+    try {
+      const decodedSearch = decodeURIComponent(search.slice(1))
+      const routeFromSearch = decodedSearch.split('&')[0].replace(/~and~/g, '&')
+      resolvedPath = routeFromSearch.startsWith('/') ? routeFromSearch : `/${routeFromSearch}`
+    } catch {
+      resolvedPath = pathname
+    }
+  }
+
+  const cleanPath = resolvedPath.replace(/\/+$/, '') || '/'
 
   if (cleanPath === '/agendar') {
     return <AgendarPage />
