@@ -10,6 +10,7 @@ import FooterPro from './components/FooterPro'
 import AgendarPage from './pages/AgendarPage'
 import AgendarReunionPage from './pages/AgendarReunionPage'
 import MetodologiaPage from './pages/MetodologiaPage'
+import NotFoundPage from './pages/NotFoundPage'
 
 function App() {
   const cleanPath = window.location.pathname.replace(/\/+$/, '') || '/'
@@ -26,18 +27,22 @@ function App() {
     return <MetodologiaPage />
   }
 
-  return (
-    <>
-      <Hero />
-      <PainPoints />
-      <Services />
-      <Process />
-      <SocialProof />
-      <ForWhom />
-      <Blog />
-      <FooterPro />
-    </>
-  )
+  if (cleanPath === '/') {
+    return (
+      <>
+        <Hero />
+        <PainPoints />
+        <Services />
+        <Process />
+        <SocialProof />
+        <ForWhom />
+        <Blog />
+        <FooterPro />
+      </>
+    )
+  }
+
+  return <NotFoundPage />
 }
 
 export default App
