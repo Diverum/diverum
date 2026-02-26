@@ -47,7 +47,7 @@ export default function NotFoundPage() {
           style={{ color: "rgba(30,35,30,0.7)" }}
         >
           Puede que la URL esté mal escrita o que el contenido haya cambiado de
-          ubicación. Contáctate con nosotros si tienes una solicitud.
+          ubicación. Contáctate con nosotros si tienes una solicitud a contacto@diverum.com y atenderemos cordialmente.
         </Motion.p>
 
         <Motion.a
